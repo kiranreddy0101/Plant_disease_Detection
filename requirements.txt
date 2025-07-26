@@ -2,5 +2,6 @@ tensorflow==2.12.0
 streamlit
 Pillow
 numpy
+opencv-python
 matplotlib
-pandas
+scikit-learn
