@@ -123,19 +123,12 @@ tab1, tab2 = st.tabs(["🌱 Detection", "📘 Info"])
 
 with tab1:
     st.markdown("## 🌿 Plant Disease Detection")
-    # Get current theme from session_state (set via toggle elsewhere)
-theme = st.session_state.get("theme", "light")
-
-# Set text color based on theme
-text_color = "#000000" if theme == "light" else "#FFFFFF"
-
-# Render info text with dynamic color
-st.sidebar.markdown(
+    # Render info text with dynamic color
+    st.sidebar.markdown(
     f"<p style='color:{text_color}; font-size: 16px;'>Upload a leaf image on the Detection tab to identify diseases and get fertilizer advice.</p>",
     unsafe_allow_html=True
-)
+    )
     uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
-
     if uploaded_file:
         image = Image.open(uploaded_file).convert('RGB')
         # Convert image to base64
