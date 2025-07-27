@@ -6,58 +6,52 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
 import base64
 
-# Theme initialization
-if "theme" not in st.session_state:
-    st.session_state["theme"] = "light"
-
 # Page config
 st.set_page_config(page_title="Plant Disease Detection", layout="wide")
 
-# Light/Dark mode toggle switch
-mode = st_toggle_switch(
-    label="Toggle Theme",
-    key="theme_switch",
-    default_value=(st.session_state["theme"] == "dark"),
-    label_after=True,
-    inactive_color="#DDD",
-    active_color="#11567f",
-    track_color="#29B5E8"
-)
-
-st.session_state["theme"] = "dark" if mode else "light"
-
-# Set color variables
-bg_color = '#121212' if st.session_state["theme"] == 'dark' else '#ffffff'
-text_color = '#ffffff' if st.session_state["theme"] == 'dark' else '#000000'
-card_bg = '#1e1e1e' if st.session_state["theme"] == 'dark' else '#f5f5f5'
-
 # Dynamic Theme CSS
-st.markdown(f"""
+st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
-    html, body, [class*="css"] {{
+    html, body, [class*="css"]  {
         font-family: 'Inter', sans-serif;
-        background-color: {bg_color};
-        color: {text_color};
-    }}
+    }
 
-    h1, h3, p {{
+    /* Light mode */
+    @media (prefers-color-scheme: light) {
+        html, body, [class*="css"]  {
+            background-color: #ffffff;
+            color: #000000 !important;
+        }
+    }
+
+    /* Dark mode */
+    @media (prefers-color-scheme: dark) {
+        html, body, [class*="css"]  {
+            background-color: #121212;
+            color: #ffffff !important;
+        }
+        .stButton > button {
+            background-color: #00cc88;
+            color: black;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+        .stButton > button:hover {
+            background-color: #009966;
+            color: white;
+        }
+    }
+
+    h1, h3, p {
         text-align: center;
-        color: {text_color};
-    }}
+    }
 
-    .prediction-card {{
-        margin: 1rem auto;
-        padding: 1rem 2rem;
-        border-radius: 16px;
-        background-color: {card_bg};
-        color: {text_color};
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-        width: 90%;
-        max-width: 600px;
-        font-size: 1rem;
-    }}
+    .css-1aumxhk, .css-ffhzg2, .stMarkdown {
+        text-align: center !important;
+    }
+
     </style>
 """, unsafe_allow_html=True)
 
