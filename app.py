@@ -213,7 +213,7 @@ with tab1:
         st.markdown(
     f"""
     <div style="display: flex; justify-content: center;">
-        <img src="data:image/png;base64,{img_str}" style="width:300px; height:auto;" />
+        <img src="data:image/png;base64,{overlay_img}" style="width:300px; height:auto;" />
     </div>
     """,
     unsafe_allow_html=True
