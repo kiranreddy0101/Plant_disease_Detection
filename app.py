@@ -136,13 +136,6 @@ with tab1:
         buffered = BytesIO()
         image.save(buffered, format="PNG")
         img_data = base64.b64encode(buffered.getvalue()).decode()
-    if uploaded_file is not None:
-    image_data = Image.open(uploaded_file)
-    st.markdown(
-        f"<div style='text-align: center;'><img src='data:image/png;base64,{base64.b64encode(uploaded_file.getvalue()).decode()}' width='200'/></div>",
-        unsafe_allow_html=True
-    )
-
         # Display image centered with fixed width
         st.markdown(
             f"""
