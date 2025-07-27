@@ -10,7 +10,7 @@ import base64
 st.set_page_config(page_title="Plant Disease Detection", layout="wide")
 # Light/Dark mode toggle
 mode = st_toggle_switch(
-    label="Theme Mode",
+    label="Dark/Light",
     key="theme_toggle",
     default_value=True,  # True = dark
     label_after=False,
