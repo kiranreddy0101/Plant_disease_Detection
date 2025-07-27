@@ -89,6 +89,10 @@ st.markdown("""
     h1, h3, p {
         text-align: center;
     }
+    <div style="text-align: center;">
+        <img src="data:image/png;base64,{img_str}" style="max-width: 100%; height: auto;" />
+        <p style="font-size: 16px; font-weight: bold;">Grad-CAM: Highlighted Disease Regions</p>
+    </div>
     </style>
 """, unsafe_allow_html=True)
 
