@@ -29,6 +29,7 @@ def set_bg_from_local(img_path):
             border-radius: 16px;
             max-width: 800px;
             margin: auto;
+            color: white;
         }}
         h1, h3, p {{
             color: #ffffff;
