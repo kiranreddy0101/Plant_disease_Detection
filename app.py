@@ -7,6 +7,34 @@ from tensorflow.keras.preprocessing.image import img_to_array
 import base64
 from io import BytesIO
 
+def get_gradcam_heatmap(model, img_array, last_conv_layer_name, pred_index=None):
+    grad_model = tf.keras.models.Model(
+        [model.inputs], [model.get_layer(last_conv_layer_name).output, model.output]
+    )
+    with tf.GradientTape() as tape:
+        conv_outputs, predictions = grad_model(img_array)
+        if pred_index is None:
+            pred_index = tf.argmax(predictions[0])
+        class_channel = predictions[:, pred_index]
+    grads = tape.gradient(class_channel, conv_outputs)
+    pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
+    conv_outputs = conv_outputs[0]
+    heatmap = conv_outputs @ pooled_grads[..., tf.newaxis]
+    heatmap = tf.squeeze(heatmap)
+    heatmap = tf.maximum(heatmap, 0) / tf.math.reduce_max(heatmap)
+    return heatmap.numpy()
+
+def overlay_gradcam(original_img, heatmap, alpha=0.4):
+    import cv2
+    import numpy as np
+
+    original_img = np.array(original_img)
+    heatmap = cv2.resize(heatmap, (original_img.shape[1], original_img.shape[0]))
+    heatmap = np.uint8(255 * heatmap)
+    heatmap_color = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
+    overlay_img = cv2.addWeighted(original_img, 1 - alpha, heatmap_color, alpha, 0)
+    return overlay_img
+
 # Page config
 st.set_page_config(page_title="Plant Disease Detection", layout="wide")
 
@@ -194,4 +222,8 @@ with tab2:
     - Mobile-friendly responsive layout  
     - Dark mode UI with instant toggle (via system preference)
     """)
-st.image(overlay_img, caption="Grad-CAM: Focused Disease Regions", use_column_width=True)
+heatmap = get_gradcam_heatmap(model, img_array, last_conv_layer_name="Conv_1")
+        overlay_img = overlay_gradcam(img, heatmap)
+
+        st.markdown("### 📊 Grad-CAM: Model Focus Visualization")
+        st.image(overlay_img, caption="Grad-CAM: Highlighted Disease Regions", use_column_width=True)
