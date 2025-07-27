@@ -24,7 +24,7 @@ def set_bg_from_local(img_path):
             overflow: auto;
         }}
         .main-container {{
-            background-color: rgba(0,0,0,0.6);
+            background-color: rgba(0, 100, 0, 0.5); 
             padding: 3rem;
             border-radius: 16px;
             max-width: 800px;
