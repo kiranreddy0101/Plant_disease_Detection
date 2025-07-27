@@ -194,3 +194,4 @@ with tab2:
     - Mobile-friendly responsive layout  
     - Dark mode UI with instant toggle (via system preference)
     """)
+st.image(overlay_img, caption="Grad-CAM: Focused Disease Regions", use_column_width=True)
