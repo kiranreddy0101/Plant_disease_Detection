@@ -209,7 +209,7 @@ with tab1:
         heatmap = get_gradcam_heatmap(model, img_array, last_conv_layer_name="Conv_1")
         overlay_img = overlay_gradcam(img, heatmap)
         st.markdown("### 📊 Grad-CAM: Model Focus Visualization")
-        st.image(overlay_img, caption="Grad-CAM: Highlighted Disease Regions", use_column_width=True)
+        st.image(overlay_img, caption="Grad-CAM: Highlighted Disease Regions", use_container_width=True)
 
 with tab2:
     st.markdown("## 📘 About This App")
