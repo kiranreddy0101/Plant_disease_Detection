@@ -213,8 +213,8 @@ with tab1:
         st.markdown(
     f"""
     <div style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
-        <img src="data:image/png;base64,{encoded_img}" style="max-width: 100%; height: auto;" />
-        <p style="font-size: 16px; font-weight: bold; text-align: center;">Grad-CAM: Highlighted Disease Regions</p>
+        <img src="data:image/png;base64,{encoded_img}" style="width:300px; height:auto; border-radius: 10px;" />
+        <p style="font-size: 16px; font-weight: bold; text-align: center; margin-top: 8px;">Grad-CAM: Highlighted Disease Regions</p>
     </div>
     """,
     unsafe_allow_html=True
