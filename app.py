@@ -112,7 +112,11 @@ fertilizer_map = {
 
 # Sidebar
 st.sidebar.title("🌿 Plant Guardian")
-st.sidebar.markdown("Upload a leaf image on the Detection tab to identify diseases and get fertilizer advice.")
+st.sidebar.markdown(
+    "<p style='color:#000000;'>Upload a leaf image on the Detection tab to identify diseases and get fertilizer advice.</p>",
+    unsafe_allow_html=True
+)
+
 
 # Tabs
 tab1, tab2 = st.tabs(["🌱 Detection", "📘 Info"])
@@ -120,7 +124,7 @@ tab1, tab2 = st.tabs(["🌱 Detection", "📘 Info"])
 with tab1:
     st.markdown('<div class="main-container">', unsafe_allow_html=True)
     st.markdown("## 🌿 Plant Disease Detection")
-    st.markdown("<p style='font-size:16px;'>Upload a leaf image to identify the disease and get fertilizer suggestions.</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size:16px;color:#000000;'>Upload a leaf image to identify the disease and get fertilizer suggestions.</p>", unsafe_allow_html=True)
     uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
 
     if uploaded_file:
