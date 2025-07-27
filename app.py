@@ -167,5 +167,5 @@ if uploaded_file:
         st.warning(f"💡 **Fertilizer Suggestion:** {fertilizer_map[predicted_class]}")
     else:
         st.success("✅ This plant appears healthy. No treatment needed!")
-st.markdown("</div>", unsafe_allow_html=True)
+
 
