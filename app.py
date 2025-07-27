@@ -10,9 +10,6 @@ from io import BytesIO
 # Page config
 st.set_page_config(page_title="Plant Disease Detection", layout="wide")
 
-# Set default text color (for sidebar and UI text)
-text_color = "#000000"  # Use white if using dark mode logic dynamically
-
 # Dynamic Theme & Custom Font CSS
 st.markdown("""
     <style>
@@ -22,37 +19,54 @@ st.markdown("""
         font-family: 'Inter', sans-serif;
     }
 
-    body {
-        background-color: #ffffff;
-        color: #000000;
+    /* Light Mode */
+    @media (prefers-color-scheme: light) {
+        body, html, [class*="css"] {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+
+        .prediction-card {
+            background-color: #f0f0f0;
+            color: #000000;
+        }
+
+        .sidebar-text {
+            color: #000000 !important;
+        }
     }
 
-    .stButton > button {
-        background-color: #00cc88;
-        color: black;
-        font-weight: bold;
-        border-radius: 8px;
+    /* Dark Mode */
+    @media (prefers-color-scheme: dark) {
+        body, html, [class*="css"] {
+            background-color: #121212 !important;
+            color: #ffffff !important;
+        }
+
+        .prediction-card {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+
+        .sidebar-text {
+            color: #ffffff !important;
+        }
     }
 
-    .stButton > button:hover {
-        background-color: #009966;
-        color: white;
+    .prediction-card {
+        padding: 12px;
+        border-radius: 10px;
+        margin-top: 10px;
+        font-size: 16px;
+        text-align: center;
     }
 
     h1, h3, p {
         text-align: center;
     }
-
-    .prediction-card {
-        background-color: #f0f0f0;
-        padding: 12px;
-        border-radius: 10px;
-        margin-top: 10px;
-        font-size: 16px;
-        color: #000;
-    }
     </style>
 """, unsafe_allow_html=True)
+
 
 # Load Model
 @st.cache_resource
@@ -122,7 +136,7 @@ fertilizer_map = {
 # Sidebar
 st.sidebar.title("🌿 Plant Guardian")
 st.sidebar.markdown(
-    f"<p style='color:{text_color}; font-size: 16px;'>Upload a leaf image on the Detection tab to identify diseases and get fertilizer advice.</p>",
+    f"<p class='sidebar-text' style='font-size: 16px;'>Upload a leaf image on the Detection tab to identify diseases and get fertilizer advice.</p>",
     unsafe_allow_html=True
 )
 
