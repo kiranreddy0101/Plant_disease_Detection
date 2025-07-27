@@ -43,9 +43,6 @@ st.markdown("""
     .css-1aumxhk, .css-ffhzg2, .stMarkdown {
         text-align: center !important;
         }
-    .stTabs [data-baseweb="tab"] {
-        color: black !important;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -115,11 +112,7 @@ fertilizer_map = {
 
 # Sidebar
 st.sidebar.title("🌿 Plant Guardian")
-st.sidebar.markdown(
-    "<p style='color:#000000;'>Upload a leaf image on the Detection tab to identify diseases and get fertilizer advice.</p>",
-    unsafe_allow_html=True
-)
-
+st.sidebar.markdown("Upload a leaf image on the Detection tab to identify diseases and get fertilizer advice.")
 
 # Tabs
 tab1, tab2 = st.tabs(["🌱 Detection", "📘 Info"])
@@ -127,7 +120,7 @@ tab1, tab2 = st.tabs(["🌱 Detection", "📘 Info"])
 with tab1:
     st.markdown('<div class="main-container">', unsafe_allow_html=True)
     st.markdown("## 🌿 Plant Disease Detection")
-    st.markdown("<p style='font-size:16px;color:#000000;'>Upload a leaf image to identify the disease and get fertilizer suggestions.</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size:16px;'>Upload a leaf image to identify the disease and get fertilizer suggestions.</p>", unsafe_allow_html=True)
     uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
 
     if uploaded_file:
@@ -150,19 +143,15 @@ with tab1:
             st.success("✅ This plant appears healthy. No treatment needed!")
 
 with tab2:
-   st.markdown("<h2 style='color: black;'>📘 About This App</h2>", unsafe_allow_html=True)
+  st.markdown("## 📘 About This App")
 st.markdown("""
-<div style='color: black; font-size: 16px;'>
 This AI-powered application helps farmers and gardeners detect plant diseases from leaf images
 and recommends suitable fertilizers or treatments.
-<br><br>
-<strong>Features:</strong>
-<ul>
-<li>Deep learning–based leaf disease classification</li>
-<li>Custom fertilizer recommendations</li>
-<li>Mobile-friendly responsive layout</li>
-<li>Dark mode UI</li>
-</ul>
-</div>
-""", unsafe_allow_html=True)
+
+**Features:**
+- Deep learning–based leaf disease classification
+- Custom fertilizer recommendations
+- Mobile-friendly responsive layout
+- Dark mode UI
+""")
 
