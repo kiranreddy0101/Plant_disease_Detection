@@ -13,32 +13,46 @@ def set_bg_from_local(img_path):
     with open(img_path, "rb") as img_file:
         img_bytes = base64.b64encode(img_file.read()).decode()
     st.markdown(
-        f"""
-        <style>
-        html, body {{
-            background-image: url("data:image/png;base64,{img_bytes}");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
-            overflow: auto;
-        }}
-        .main-container {{
-            background-color: rgba(0, 0, 0, 0.65); 
-            padding: 2.5rem;
-            border-radius: 16px;
-            max-width: 900px;
-            margin: 2rem auto;
-        }}
-        h1, h3, p {{
-            color: #ffffff;
-            text-align: center;
-        }}
-        footer, header, .stDeployButton {{ display: none; }}
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+    f"""
+    <style>
+    html, body {{
+        background-image: url("data:image/png;base64,{img_bytes}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh;
+        overflow: auto;
+    }}
+
+    .main-container {{
+        background-color: rgba(0, 0, 0, 0.6); /* Darker but readable */
+        padding: 2rem;
+        border-radius: 16px;
+        max-width: 900px;
+        margin: 2rem auto;
+        box-shadow: 0 0 12px rgba(0,0,0,0.6);
+    }}
+
+    h1, h3, p {{
+        color: #ffffff;
+        text-align: center;
+    }}
+
+    .css-1d391kg, .css-qcqlej, .css-1cpxqw2, .css-18ni7ap {{
+        color: white !important;
+    }}
+
+    .stAlert {{
+        background-color: rgba(20, 20, 20, 0.9) !important;
+        border-left: 0.5rem solid #00ff88 !important;
+        color: white !important;
+    }}
+
+    footer, header, .stDeployButton {{ display: none; }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # Set background image
 set_bg_from_local("download.jpg")
