@@ -5,53 +5,52 @@ from PIL import Image
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
 import base64
+from io import BytesIO
 
 # Page config
 st.set_page_config(page_title="Plant Disease Detection", layout="wide")
 
-# Dynamic Theme CSS
+# Set default text color (for sidebar and UI text)
+text_color = "#000000"  # Use white if using dark mode logic dynamically
+
+# Dynamic Theme & Custom Font CSS
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
-    html, body, [class*="css"]  {
+    html, body, [class*="css"] {
         font-family: 'Inter', sans-serif;
     }
 
-    /* Light mode */
-    @media (prefers-color-scheme: light) {
-        html, body, [class*="css"]  {
-            background-color: #ffffff;
-            color: #000000 !important;
-        }
+    body {
+        background-color: #ffffff;
+        color: #000000;
     }
 
-    /* Dark mode */
-    @media (prefers-color-scheme: dark) {
-        html, body, [class*="css"]  {
-            background-color: #121212;
-            color: #ffffff !important;
-        }
-        .stButton > button {
-            background-color: #00cc88;
-            color: black;
-            font-weight: bold;
-            border-radius: 8px;
-        }
-        .stButton > button:hover {
-            background-color: #009966;
-            color: white;
-        }
+    .stButton > button {
+        background-color: #00cc88;
+        color: black;
+        font-weight: bold;
+        border-radius: 8px;
+    }
+
+    .stButton > button:hover {
+        background-color: #009966;
+        color: white;
     }
 
     h1, h3, p {
         text-align: center;
     }
 
-    .css-1aumxhk, .css-ffhzg2, .stMarkdown {
-        text-align: center !important;
+    .prediction-card {
+        background-color: #f0f0f0;
+        padding: 12px;
+        border-radius: 10px;
+        margin-top: 10px;
+        font-size: 16px;
+        color: #000;
     }
-
     </style>
 """, unsafe_allow_html=True)
 
@@ -63,7 +62,8 @@ def load_trained_model():
 model = load_trained_model()
 
 # Class Labels and Fertilizer Tips
-class_names = [ 'Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy',
+class_names = [ 
+    'Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy',
     'Background_without_leaves', 'Blueberry___healthy', 'Cherry___Powdery_mildew', 'Cherry___healthy',
     'Corn___Cercospora_leaf_spot Gray_leaf_spot', 'Corn___Common_rust', 'Corn___Northern_Leaf_Blight', 'Corn___healthy',
     'Grape___Black_rot', 'Grape___Esca_(Black_Measles)', 'Grape___Leaf_blight_(Isariopsis_Leaf_Spot)', 'Grape___healthy',
@@ -74,9 +74,11 @@ class_names = [ 'Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_
     'Strawberry___Leaf_scorch', 'Strawberry___healthy',
     'Tomato___Bacterial_spot', 'Tomato___Early_blight', 'Tomato___Late_blight', 'Tomato___Leaf_Mold',
     'Tomato___Septoria_leaf_spot', 'Tomato___Spider_mites Two-spotted_spider_mite',
-    'Tomato___Target_Spot', 'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus', 'Tomato___healthy'] 
+    'Tomato___Target_Spot', 'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus', 'Tomato___healthy'
+]
 
-fertilizer_map = { 'Apple___Apple_scab': 'Use copper-based fungicides',
+fertilizer_map = {
+    'Apple___Apple_scab': 'Use copper-based fungicides',
     'Apple___Black_rot': 'Apply sulfur sprays or captan',
     'Apple___Cedar_apple_rust': 'Use myclobutanil or mancozeb',
     'Apple___healthy': 'No fertilizer needed',
@@ -114,11 +116,15 @@ fertilizer_map = { 'Apple___Apple_scab': 'Use copper-based fungicides',
     'Tomato___Target_Spot': 'Apply fungicides like pyraclostrobin',
     'Tomato___Tomato_Yellow_Leaf_Curl_Virus': 'Use resistant varieties; spray imidacloprid',
     'Tomato___Tomato_mosaic_virus': 'Use resistant cultivars and disinfect tools',
-    'Tomato___healthy': 'Use balanced NPK fertilizer (10-10-10)',}  
+    'Tomato___healthy': 'Use balanced NPK fertilizer (10-10-10)',
+}
 
 # Sidebar
 st.sidebar.title("🌿 Plant Guardian")
-st.sidebar.markdown(f"<p style='color:{text_color}; font-size: 16px;'>Upload a leaf image on the Detection tab to identify diseases and get fertilizer advice.</p>", unsafe_allow_html=True)
+st.sidebar.markdown(
+    f"<p style='color:{text_color}; font-size: 16px;'>Upload a leaf image on the Detection tab to identify diseases and get fertilizer advice.</p>",
+    unsafe_allow_html=True
+)
 
 # Tabs
 tab1, tab2 = st.tabs(["🌱 Detection", "📘 Info"])
@@ -129,7 +135,8 @@ with tab1:
 
     if uploaded_file:
         image = Image.open(uploaded_file).convert('RGB')
-        from io import BytesIO
+
+        # Display uploaded image
         buffered = BytesIO()
         image.save(buffered, format="PNG")
         img_data = base64.b64encode(buffered.getvalue()).decode()
@@ -137,17 +144,19 @@ with tab1:
         st.markdown(
             f"""
             <div style="text-align: center;">
-                <img src="data:image/png;base64,{img_data}" alt="Uploaded Image" width="300"/>
+                <img src="data:image/png;base64,{img_data}" alt="Uploaded Leaf" width="300"/>
                 <p style="color: {text_color}; font-size: 14px;">Uploaded Image</p>
             </div>
             """,
             unsafe_allow_html=True
         )
 
+        # Prepare image for prediction
         img = image.resize((224, 224))
         img_array = img_to_array(img) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
 
+        # Predict
         prediction = model.predict(img_array)
         predicted_class = class_names[np.argmax(prediction)]
         confidence = np.max(prediction) * 100
@@ -155,8 +164,10 @@ with tab1:
         st.markdown(f"<div class='prediction-card'>🔎 <strong>Prediction:</strong> {predicted_class}</div>", unsafe_allow_html=True)
         st.markdown(f"<div class='prediction-card'>🎯 <strong>Confidence:</strong> {confidence:.2f}%</div>", unsafe_allow_html=True)
 
+        # Fertilizer suggestion
         if predicted_class in fertilizer_map:
-            st.markdown(f"<div class='prediction-card'>💡 <strong>Fertilizer Tip:</strong> {fertilizer_map[predicted_class]}</div>", unsafe_allow_html=True)
+            tip = fertilizer_map[predicted_class]
+            st.markdown(f"<div class='prediction-card'>💡 <strong>Fertilizer Tip:</strong> {tip}</div>", unsafe_allow_html=True)
         else:
             st.success("✅ This plant appears healthy. No treatment needed!")
 
@@ -170,5 +181,5 @@ with tab2:
     - Deep learning–based leaf disease classification  
     - Custom fertilizer recommendations  
     - Mobile-friendly responsive layout  
-    - Dark mode UI with instant toggle
+    - Dark mode UI with instant toggle (via system preference)
     """)
