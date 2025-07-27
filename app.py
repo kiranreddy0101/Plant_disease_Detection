@@ -9,38 +9,31 @@ import base64
 # Page config
 st.set_page_config(page_title="Plant Disease Detection", layout="wide")
 # Light/Dark mode toggle
-mode = st_toggle_switch(
-    label="Dark/Light",
-    key="theme_toggle",
-    default_value=True,  # True = dark
-    label_after=False,
-    inactive_color="#D3D3D3",
-    active_color="#00cc88",
-    track_color="#29b5e8"
-)
-
+mode = st.sidebar.radio("🌗 Theme", ["Dark", "Light"])
 
 # ---------- Dark Mode Styling with Google Fonts ----------
+# Dynamic Theme CSS
 st.markdown(f"""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
     html, body, [class*="css"] {{
         font-family: 'Inter', sans-serif;
-        color: {'#ffffff' if mode else '#000000'};
-        background-color: {'#121212' if mode else '#ffffff'};
+        background-color: {'#121212' if mode == 'Dark' else '#ffffff'};
+        color: {'#ffffff' if mode == 'Dark' else '#000000'};
     }}
 
     h1, h3, p {{
         text-align: center;
+        color: {'#ffffff' if mode == 'Dark' else '#000000'};
     }}
 
     .prediction-card {{
         margin: 1rem auto;
         padding: 1rem 2rem;
         border-radius: 16px;
-        background-color: {'#1e1e1e' if mode else '#f5f5f5'};
-        color: {'#ffffff' if mode else '#000000'};
+        background-color: {'#1e1e1e' if mode == 'Dark' else '#f5f5f5'};
+        color: {'#ffffff' if mode == 'Dark' else '#000000'};
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
         width: 90%;
         max-width: 600px;
@@ -48,8 +41,6 @@ st.markdown(f"""
     }}
     </style>
 """, unsafe_allow_html=True)
-
-
 
 # ---------- Load Model ----------
 @st.cache_resource
