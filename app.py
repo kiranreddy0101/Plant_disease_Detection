@@ -159,11 +159,9 @@ with tab1:
             f"""
             <div style="text-align: center;">
                 <img src="data:image/png;base64,{img_data}" alt="Uploaded Leaf" width="300"/>
-                <p style="color: {text_color}; font-size: 14px;">Uploaded Image</p>
+                <p class='sidebar-text' style='font-size: 16px;'>Uploaded Image</p>
             </div>
-            """,
-            unsafe_allow_html=True
-        )
+            """,unsafe_allow_html=True)
 
         # Prepare image for prediction
         img = image.resize((224, 224))
