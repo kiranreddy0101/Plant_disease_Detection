@@ -16,7 +16,7 @@ st.markdown("""
     html, body, [class*="css"]  {
         font-family: 'Inter', sans-serif;
         background-color: #121212;
-        color: #00ffcc;
+        color: #000000;
     }
     .main-container {
         background-color: rgba(30, 30, 30, 0.95);
