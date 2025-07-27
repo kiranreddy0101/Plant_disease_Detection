@@ -70,17 +70,4 @@ model.fit(train_generator, validation_data=val_generator, epochs=30, callbacks=c
 # Save final model
 model.save("plant_disease_model_final.h5")
 model.summary()
-last_conv_layer_name = "Conv_1"
 
-# Load model and image
-model = load_model("plant_disease_model_final.h5")
-image_path = "sample_leaf.jpg"  # Replace with uploaded image
-original_img = cv2.imread(image_path)
-img_resized = cv2.resize(original_img, (224, 224))
-img_array = np.expand_dims(img_resized / 255.0, axis=0)
-
-# Get heatmap
-heatmap = get_gradcam_heatmap(model, img_array, last_conv_layer_name="Conv_1")
-
-# Overlay
-overlay_img = overlay_gradcam(original_img, heatmap)
