@@ -30,7 +30,7 @@ def set_bg_from_local(img_path):
     )
 
 # 🔁 Replace with your actual image file path
-set_bg_from_local("/download.jpg")
+set_bg_from_local("download.jpg")
 
 # ---------- Styling ----------
 st.markdown("""
