@@ -1,6 +1,7 @@
 import streamlit as st
 from streamlit_toggle import st_toggle_switch
 import numpy as np
+import matplotlib.pyplot as plt
 from PIL import Image
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
