@@ -133,7 +133,7 @@ with tab1:
         prediction = model.predict(img_array)
         predicted_class = class_names[np.argmax(prediction)]
         confidence = np.max(prediction) * 100
-                st.markdown(f"<div style='background-color:#1e1e1e;padding:20px;border-radius:12px; color:white;'>🩺 <strong>Prediction:</strong> {predicted_class}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='background-color:#1e1e1e;padding:20px;border-radius:12px; color:white;'>🩺 <strong>Prediction:</strong> {predicted_class}</div>", unsafe_allow_html=True)
         st.markdown(f"<div style='background-color:#333333;padding:15px;border-radius:12px; color:white;'>🎯 <strong>Confidence:</strong> {confidence:.2f}%</div>", unsafe_allow_html=True)
 
         if predicted_class in fertilizer_map:
