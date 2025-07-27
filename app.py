@@ -139,7 +139,12 @@ st.markdown("## 🌿 Plant Disease Detection")
 # ---------- Upload and Predict ----------
 st.subheader("📷 Upload a Leaf Image")
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
-st.markdown("<p style='color:black;'>Upload a leaf image to identify the disease and get fertilizer suggestions.</p>", unsafe_allow_html=True)
+st.markdown("""
+    <div style='background-color: rgba(255, 255, 255, 0.7); padding: 10px 20px; border-radius: 10px; text-align: center; margin-top: 10px;'>
+        <p style='color: #111111; font-size: 18px;'>Upload a leaf image to identify the disease and get fertilizer suggestions.</p>
+    </div>
+""", unsafe_allow_html=True)
+
 if uploaded_file:
     image = Image.open(uploaded_file).convert('RGB')
     st.image(image, caption='Uploaded Image', use_container_width=True)
