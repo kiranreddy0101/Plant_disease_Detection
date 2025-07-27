@@ -132,15 +132,12 @@ with tab1:
     uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
 
     if uploaded_file:
-            if uploaded_file:
         image = Image.open(uploaded_file).convert('RGB')
-
         # Convert image to base64
         from io import BytesIO
         buffered = BytesIO()
         image.save(buffered, format="PNG")
         img_data = base64.b64encode(buffered.getvalue()).decode()
-
         # Display image centered with fixed width
         st.markdown(
             f"""
@@ -151,7 +148,6 @@ with tab1:
             """,
             unsafe_allow_html=True
         )
-
         img = image.resize((224, 224))
         img_array = img_to_array(img) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
