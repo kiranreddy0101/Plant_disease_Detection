@@ -50,6 +50,7 @@ st.markdown("""
     .css-1aumxhk, .css-ffhzg2, .stMarkdown {
         text-align: center !important;
     }
+
     </style>
 """, unsafe_allow_html=True)
 
@@ -131,8 +132,26 @@ with tab1:
     uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
 
     if uploaded_file:
+            if uploaded_file:
         image = Image.open(uploaded_file).convert('RGB')
-        st.image(image, caption='Uploaded Image', width=300)
+
+        # Convert image to base64
+        from io import BytesIO
+        buffered = BytesIO()
+        image.save(buffered, format="PNG")
+        img_data = base64.b64encode(buffered.getvalue()).decode()
+
+        # Display image centered with fixed width
+        st.markdown(
+            f"""
+            <div style="text-align: center;">
+                <img src="data:image/png;base64,{img_data}" alt="Uploaded Image" width="300"/>
+                <p style="color: inherit; font-size: 14px;">Uploaded Image</p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
         img = image.resize((224, 224))
         img_array = img_to_array(img) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
@@ -140,7 +159,7 @@ with tab1:
         prediction = model.predict(img_array)
         predicted_class = class_names[np.argmax(prediction)]
         confidence = np.max(prediction) * 100
-        st.markdown(f"<div style='background-color:#1e1e1e;padding:20px;border-radius:12px; color:white;'>🩺 <strong>Prediction:</strong> {predicted_class}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='background-color:#1e1e1e;padding:20px;border-radius:12px; color:white;'>🔎 <strong>Prediction:</strong> {predicted_class}</div>", unsafe_allow_html=True)
         st.markdown(f"<div style='background-color:#333333;padding:15px;border-radius:12px; color:white;'>🎯 <strong>Confidence:</strong> {confidence:.2f}%</div>", unsafe_allow_html=True)
 
         if predicted_class in fertilizer_map:
