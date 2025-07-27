@@ -15,28 +15,44 @@ st.markdown("""
 
     html, body, [class*="css"]  {
         font-family: 'Inter', sans-serif;
-        background-color: #121212;
-        color: #000000;
     }
+
+    /* Light mode */
+    @media (prefers-color-scheme: light) {
+        html, body, [class*="css"]  {
+            background-color: #ffffff;
+            color: #000000 !important;
+        }
+    }
+
+    /* Dark mode */
+    @media (prefers-color-scheme: dark) {
+        html, body, [class*="css"]  {
+            background-color: #121212;
+            color: #ffffff !important;
+        }
+        .stButton > button {
+            background-color: #00cc88;
+            color: black;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+        .stButton > button:hover {
+            background-color: #009966;
+            color: white;
+        }
+    }
+
     h1, h3, p {
-        color: #00ffcc;
         text-align: center;
     }
-    .stButton > button {
-        background-color: #00cc88;
-        color: black;
-        font-weight: bold;
-        border-radius: 8px;
-    }
-    .stButton > button:hover {
-        background-color: #009966;
-        color: white;
-    }
+
     .css-1aumxhk, .css-ffhzg2, .stMarkdown {
         text-align: center !important;
-        }
+    }
     </style>
 """, unsafe_allow_html=True)
+
 
 # ---------- Load Model ----------
 @st.cache_resource
@@ -116,7 +132,7 @@ with tab1:
 
     if uploaded_file:
         image = Image.open(uploaded_file).convert('RGB')
-        st.image(image, caption='Uploaded Image', use_container_width=True)
+        st.image(image, caption='Uploaded Image', width=300)
         img = image.resize((224, 224))
         img_array = img_to_array(img) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
