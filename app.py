@@ -16,7 +16,7 @@ st.markdown("""
     html, body, [class*="css"]  {
         font-family: 'Inter', sans-serif;
         background-color: #121212;
-        color: #f0f0f0;
+        color: #00ffcc;
     }
     .main-container {
         background-color: rgba(30, 30, 30, 0.95);
@@ -119,7 +119,7 @@ tab1, tab2 = st.tabs(["🌱 Detection", "📘 Info"])
 
 with tab1:
     st.markdown('<div class="main-container">', unsafe_allow_html=True)
-    st.markdown("## 🧪 Plant Disease Detection")
+    st.markdown("## 🌿 Plant Disease Detection")
     st.markdown("<p style='font-size:16px;'>Upload a leaf image to identify the disease and get fertilizer suggestions.</p>", unsafe_allow_html=True)
     uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
 
