@@ -3,11 +3,14 @@ from streamlit_toggle import st_toggle_switch
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
+import tensorflow as tf
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
 import base64
 from io import BytesIO
+import cv2
 
+# Grad-CAM Functions
 def get_gradcam_heatmap(model, img_array, last_conv_layer_name, pred_index=None):
     grad_model = tf.keras.models.Model(
         [model.inputs], [model.get_layer(last_conv_layer_name).output, model.output]
@@ -26,9 +29,6 @@ def get_gradcam_heatmap(model, img_array, last_conv_layer_name, pred_index=None)
     return heatmap.numpy()
 
 def overlay_gradcam(original_img, heatmap, alpha=0.4):
-    import cv2
-    import numpy as np
-
     original_img = np.array(original_img)
     heatmap = cv2.resize(heatmap, (original_img.shape[1], original_img.shape[0]))
     heatmap = np.uint8(255 * heatmap)
@@ -36,10 +36,10 @@ def overlay_gradcam(original_img, heatmap, alpha=0.4):
     overlay_img = cv2.addWeighted(original_img, 1 - alpha, heatmap_color, alpha, 0)
     return overlay_img
 
-# Page config
+# Streamlit page config
 st.set_page_config(page_title="Plant Disease Detection", layout="wide")
 
-# Dynamic Theme & Custom Font CSS
+# Custom CSS
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
@@ -54,12 +54,10 @@ st.markdown("""
             background-color: #ffffff !important;
             color: #000000 !important;
         }
-
         .prediction-card {
             background-color: #f0f0f0;
             color: #000000;
         }
-
         .sidebar-text {
             color: #000000 !important;
         }
@@ -71,12 +69,10 @@ st.markdown("""
             background-color: #121212 !important;
             color: #ffffff !important;
         }
-
         .prediction-card {
             background-color: #1e1e1e;
             color: #ffffff;
         }
-
         .sidebar-text {
             color: #ffffff !important;
         }
@@ -96,17 +92,15 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-
-# Load Model
+# Load model
 @st.cache_resource
 def load_trained_model():
     return load_model("plant_disease_model_final.h5")
 
 model = load_trained_model()
 
-# Class Labels and Fertilizer Tips
-class_names = [ 
-    'Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy',
+# Class labels and fertilizer advice
+class_names = [ 'Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy',
     'Background_without_leaves', 'Blueberry___healthy', 'Cherry___Powdery_mildew', 'Cherry___healthy',
     'Corn___Cercospora_leaf_spot Gray_leaf_spot', 'Corn___Common_rust', 'Corn___Northern_Leaf_Blight', 'Corn___healthy',
     'Grape___Black_rot', 'Grape___Esca_(Black_Measles)', 'Grape___Leaf_blight_(Isariopsis_Leaf_Spot)', 'Grape___healthy',
@@ -117,11 +111,10 @@ class_names = [
     'Strawberry___Leaf_scorch', 'Strawberry___healthy',
     'Tomato___Bacterial_spot', 'Tomato___Early_blight', 'Tomato___Late_blight', 'Tomato___Leaf_Mold',
     'Tomato___Septoria_leaf_spot', 'Tomato___Spider_mites Two-spotted_spider_mite',
-    'Tomato___Target_Spot', 'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus', 'Tomato___healthy'
-]
+    'Tomato___Target_Spot', 'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus', 'Tomato___healthy']  
 
-fertilizer_map = {
-    'Apple___Apple_scab': 'Use copper-based fungicides',
+
+fertilizer_map = {'Apple___Apple_scab': 'Use copper-based fungicides',
     'Apple___Black_rot': 'Apply sulfur sprays or captan',
     'Apple___Cedar_apple_rust': 'Use myclobutanil or mancozeb',
     'Apple___healthy': 'No fertilizer needed',
@@ -159,8 +152,7 @@ fertilizer_map = {
     'Tomato___Target_Spot': 'Apply fungicides like pyraclostrobin',
     'Tomato___Tomato_Yellow_Leaf_Curl_Virus': 'Use resistant varieties; spray imidacloprid',
     'Tomato___Tomato_mosaic_virus': 'Use resistant cultivars and disinfect tools',
-    'Tomato___healthy': 'Use balanced NPK fertilizer (10-10-10)',
-}
+    'Tomato___healthy': 'Use balanced NPK fertilizer (10-10-10)',}  
 
 # Sidebar
 st.sidebar.title("🌿 Plant Guardian")
@@ -168,6 +160,7 @@ st.sidebar.markdown(
     "<p style='font-size:16px;'>Upload a leaf image on the Detection tab to identify diseases and get fertilizer advice.</p>",
     unsafe_allow_html=True
 )
+
 # Tabs
 tab1, tab2 = st.tabs(["🌱 Detection", "📘 Info"])
 
@@ -189,9 +182,9 @@ with tab1:
                 <img src="data:image/png;base64,{img_data}" alt="Uploaded Leaf" width="300"/>
                 <p class='sidebar-text' style='font-size: 16px;'>Uploaded Image</p>
             </div>
-            """,unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
 
-        # Prepare image for prediction
+        # Prepare image
         img = image.resize((224, 224))
         img_array = img_to_array(img) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
@@ -201,6 +194,7 @@ with tab1:
         predicted_class = class_names[np.argmax(prediction)]
         confidence = np.max(prediction) * 100
 
+        # Display prediction and confidence
         st.markdown(f"<div class='prediction-card'>🔎 <strong>Prediction:</strong> {predicted_class}</div>", unsafe_allow_html=True)
         st.markdown(f"<div class='prediction-card'>🎯 <strong>Confidence:</strong> {confidence:.2f}%</div>", unsafe_allow_html=True)
 
@@ -211,6 +205,12 @@ with tab1:
         else:
             st.success("✅ This plant appears healthy. No treatment needed!")
 
+        # Grad-CAM Visualization
+        heatmap = get_gradcam_heatmap(model, img_array, last_conv_layer_name="Conv_1")
+        overlay_img = overlay_gradcam(img, heatmap)
+        st.markdown("### 📊 Grad-CAM: Model Focus Visualization")
+        st.image(overlay_img, caption="Grad-CAM: Highlighted Disease Regions", use_column_width=True)
+
 with tab2:
     st.markdown("## 📘 About This App")
     st.markdown("""
@@ -220,11 +220,7 @@ with tab2:
     **Features:**
     - Deep learning–based leaf disease classification  
     - Custom fertilizer recommendations  
+    - Grad-CAM for explainable AI  
     - Mobile-friendly responsive layout  
     - Dark mode UI with instant toggle (via system preference)
     """)
-heatmap = get_gradcam_heatmap(model, img_array, last_conv_layer_name="Conv_1")
-        overlay_img = overlay_gradcam(img, heatmap)
-
-        st.markdown("### 📊 Grad-CAM: Model Focus Visualization")
-        st.image(overlay_img, caption="Grad-CAM: Highlighted Disease Regions", use_column_width=True)
