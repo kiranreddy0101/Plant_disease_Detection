@@ -67,4 +67,6 @@ callbacks = [
 model.fit(train_generator, validation_data=val_generator, epochs=30, callbacks=callbacks)
 
 # Save final model
-model.save('plant_disease_model_final.keras')
+# Save a clean version just for inference
+model.save("plant_disease_model_final_clean.keras", include_optimizer=False)
+
