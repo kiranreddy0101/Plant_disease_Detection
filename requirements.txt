@@ -2,5 +2,5 @@ tensorflow==2.18.0
 numpy<2.0
 streamlit-toggle-switch
 Pillow
-opencv-python
+opencv-python-headless
 matplotlib
