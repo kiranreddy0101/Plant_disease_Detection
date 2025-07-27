@@ -6,6 +6,14 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
 import base64
 
+# Theme initialization
+if "theme" not in st.session_state:
+    st.session_state["theme"] = "light"
+
+# Toggle to switch theme
+theme_choice = st.radio("Choose Theme:", ["Light", "Dark"], horizontal=True)
+st.session_state["theme"] = theme_choice.lower()
+
 # Page config
 st.set_page_config(page_title="Plant Disease Detection", layout="wide")
 # Light/Dark mode toggle
@@ -115,7 +123,17 @@ tab1, tab2 = st.tabs(["🌱 Detection", "📘 Info"])
 
 with tab1:
     st.markdown("## 🌿 Plant Disease Detection")
-    st.markdown("<p style='font-size:16px;'>Upload a leaf image to identify the disease and get fertilizer suggestions.</p>", unsafe_allow_html=True)
+    # Get current theme from session_state (set via toggle elsewhere)
+theme = st.session_state.get("theme", "light")
+
+# Set text color based on theme
+text_color = "#000000" if theme == "light" else "#FFFFFF"
+
+# Render info text with dynamic color
+st.sidebar.markdown(
+    f"<p style='color:{text_color}; font-size: 16px;'>Upload a leaf image on the Detection tab to identify diseases and get fertilizer advice.</p>",
+    unsafe_allow_html=True
+)
     uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
 
     if uploaded_file:
@@ -125,6 +143,13 @@ with tab1:
         buffered = BytesIO()
         image.save(buffered, format="PNG")
         img_data = base64.b64encode(buffered.getvalue()).decode()
+    if uploaded_file is not None:
+    image_data = Image.open(uploaded_file)
+    st.markdown(
+        f"<div style='text-align: center;'><img src='data:image/png;base64,{base64.b64encode(uploaded_file.getvalue()).decode()}' width='200'/></div>",
+        unsafe_allow_html=True
+    )
+
         # Display image centered with fixed width
         st.markdown(
             f"""
