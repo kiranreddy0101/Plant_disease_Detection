@@ -120,7 +120,7 @@ fertilizer_map = { 'Apple___Apple_scab': 'Use copper-based fungicides',
     'Tomato___Target_Spot': 'Apply fungicides like pyraclostrobin',
     'Tomato___Tomato_Yellow_Leaf_Curl_Virus': 'Use resistant varieties; spray imidacloprid',
     'Tomato___Tomato_mosaic_virus': 'Use resistant cultivars and disinfect tools',
-    'Tomato___healthy': 'Use balanced NPK fertilizer (10-10-10);}  
+    'Tomato___healthy': 'Use balanced NPK fertilizer (10-10-10)';}  
 
 # Sidebar
 st.sidebar.title("🌿 Plant Guardian")
