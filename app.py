@@ -212,9 +212,9 @@ with tab1:
         st.markdown("### 📊 Grad-CAM: Model Focus Visualization")
         st.markdown(
     f"""
-    <div style="text-align: center;">
-        <img src="data:image/png;base64,{img_str}" width: "300"/>
-        <p style="font-size: 16px; font-weight: bold;">Grad-CAM: Highlighted Disease Regions</p>
+    <div style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
+        <img src="data:image/png;base64,{encoded_img}" style="max-width: 100%; height: auto;" />
+        <p style="font-size: 16px; font-weight: bold; text-align: center;">Grad-CAM: Highlighted Disease Regions</p>
     </div>
     """,
     unsafe_allow_html=True
