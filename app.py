@@ -136,10 +136,8 @@ fertilizer_map = {
 # Sidebar
 st.sidebar.title("🌿 Plant Guardian")
 st.sidebar.markdown(
-    f"<p class='sidebar-text' style='font-size: 16px;'>Upload a leaf image on the Detection tab to identify diseases and get fertilizer advice.</p>",
-    unsafe_allow_html=True
-)
-
+    f"<p class='sidebar-text' style='font-size:16px;'>Upload a leaf image on the Detection tab to identify diseases and get fertilizer advice.</p>",
+    unsafe_allow_html=True)
 # Tabs
 tab1, tab2 = st.tabs(["🌱 Detection", "📘 Info"])
 
@@ -186,7 +184,7 @@ with tab1:
 with tab2:
     st.markdown("## 📘 About This App")
     st.markdown("""
-    This AI-powered application helps farmers and gardeners detect plant diseases from leaf images 
+    This application helps farmers and gardeners detect plant diseases from leaf images 
     and recommends suitable fertilizers or treatments.
 
     **Features:**
