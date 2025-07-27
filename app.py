@@ -18,14 +18,6 @@ st.markdown("""
         background-color: #121212;
         color: #000000;
     }
-    .main-container {
-        background-color: rgba(30, 30, 30, 0.95);
-        padding: 2rem;
-        border-radius: 16px;
-        max-width: 900px;
-        margin: 2rem auto;
-        box-shadow: 0 0 20px rgba(0, 255, 150, 0.3);
-    }
     h1, h3, p {
         color: #00ffcc;
         text-align: center;
@@ -118,7 +110,6 @@ st.sidebar.markdown("Upload a leaf image on the Detection tab to identify diseas
 tab1, tab2 = st.tabs(["🌱 Detection", "📘 Info"])
 
 with tab1:
-    st.markdown('<div class="main-container">', unsafe_allow_html=True)
     st.markdown("## 🌿 Plant Disease Detection")
     st.markdown("<p style='font-size:16px;'>Upload a leaf image to identify the disease and get fertilizer suggestions.</p>", unsafe_allow_html=True)
     uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
@@ -138,20 +129,19 @@ with tab1:
 
         if predicted_class in fertilizer_map:
             st.markdown(f"<div style='background-color:#262626;padding:15px;border-radius:12px; color:white;'>💡 <strong>Fertilizer Tip:</strong> {fertilizer_map[predicted_class]}</div>", unsafe_allow_html=True)
-
         else:
             st.success("✅ This plant appears healthy. No treatment needed!")
 
 with tab2:
-  st.markdown("## 📘 About This App")
-  st.markdown("""
-   This application helps farmers and gardeners detect plant diseases from leaf images
-   and recommends suitable fertilizers or treatments.
+    st.markdown("## 📘 About This App")
+    st.markdown("""
+    This AI-powered application helps farmers and gardeners detect plant diseases from leaf images 
+    and recommends suitable fertilizers or treatments.
 
-   **Features:**
-   - Deep learning–based leaf disease classification
-   - Custom fertilizer recommendations
-   - Mobile-friendly responsive layout
-   - Dark mode UI
-   """)
+    **Features:**
+    - Deep learning–based leaf disease classification  
+    - Custom fertilizer recommendations  
+    - Mobile-friendly responsive layout  
+    - Dark mode UI
+    """)
 
