@@ -42,6 +42,9 @@ st.markdown("""
     }
     .css-1aumxhk, .css-ffhzg2, .stMarkdown {
         text-align: center !important;
+        }
+    .stTabs [data-baseweb="tab"] {
+        color: black !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -147,14 +150,19 @@ with tab1:
             st.success("✅ This plant appears healthy. No treatment needed!")
 
 with tab2:
-    st.markdown("## 📘 About This App")
-    st.markdown("""
-    This AI-powered application helps farmers and gardeners detect plant diseases from leaf images
-    and recommends suitable fertilizers or treatments. 
+   st.markdown("<h2 style='color: black;'>📘 About This App</h2>", unsafe_allow_html=True)
+st.markdown("""
+<div style='color: black; font-size: 16px;'>
+This AI-powered application helps farmers and gardeners detect plant diseases from leaf images
+and recommends suitable fertilizers or treatments.
+<br><br>
+<strong>Features:</strong>
+<ul>
+<li>Deep learning–based leaf disease classification</li>
+<li>Custom fertilizer recommendations</li>
+<li>Mobile-friendly responsive layout</li>
+<li>Dark mode UI</li>
+</ul>
+</div>
+""", unsafe_allow_html=True)
 
-    **Features:**
-    - Deep learning–based leaf disease classification
-    - Custom fertilizer recommendations
-    - Mobile-friendly responsive layout
-    - Dark mode UI
-    """)
