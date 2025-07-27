@@ -134,15 +134,17 @@ fertilizer_map = {
     'Tomato___Tomato_mosaic_virus': 'Use resistant cultivars and disinfect tools',
     'Tomato___healthy': 'Use balanced NPK fertilizer (10-10-10)',
 }
-# ---------- Container Layout ----------
+st.markdown('<div class="main-container">', unsafe_allow_html=True)
+st.markdown("## 🌿 Plant Disease Detection")
+# ---------- Upload and Predict ----------
+st.subheader("📷 Upload a Leaf Image")
+uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 st.markdown("""
-    <div style='background-color: rgba(255, 255, 255, 0.85); padding: 2rem; border-radius: 15px; max-width: 900px; margin: 2rem auto; box-shadow: 0 0 20px rgba(0,0,0,0.2);'>
-        <h2 style='color: #2c3e50; text-align: center;'>🌿 Plant Disease Detection</h2>
-        <h4 style='color: #333333; text-align: center;'>📷 Upload a Leaf Image</h4>
-        <p style='color: #444444; font-size: 16px; text-align: center;'>
-            Upload a leaf image to identify the disease and get fertilizer suggestions.
-        </p>
+    <div style='background-color: rgba(255, 255, 255, 0.7); padding: 10px 20px; border-radius: 10px; text-align: center; margin-top: 10px;'>
+        <p style='color: #111111; font-size: 18px;'>Upload a leaf image to identify the disease and get fertilizer suggestions.</p>
+    </div>
 """, unsafe_allow_html=True)
+
 
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
