@@ -10,16 +10,27 @@ import base64
 if "theme" not in st.session_state:
     st.session_state["theme"] = "light"
 
-# Toggle to switch theme
-theme_choice = st.radio("Choose Theme:", ["Light", "Dark"], horizontal=True)
-st.session_state["theme"] = theme_choice.lower()
-
 # Page config
 st.set_page_config(page_title="Plant Disease Detection", layout="wide")
-# Light/Dark mode toggle
-mode = st.sidebar.radio("🌗 Theme", ["Dark", "Light"])
 
-# ---------- Dark Mode Styling with Google Fonts ----------
+# Light/Dark mode toggle switch
+mode = st_toggle_switch(
+    label="Toggle Theme",
+    key="theme_switch",
+    default_value=(st.session_state["theme"] == "dark"),
+    label_after=True,
+    inactive_color="#DDD",
+    active_color="#11567f",
+    track_color="#29B5E8"
+)
+
+st.session_state["theme"] = "dark" if mode else "light"
+
+# Set color variables
+bg_color = '#121212' if st.session_state["theme"] == 'dark' else '#ffffff'
+text_color = '#ffffff' if st.session_state["theme"] == 'dark' else '#000000'
+card_bg = '#1e1e1e' if st.session_state["theme"] == 'dark' else '#f5f5f5'
+
 # Dynamic Theme CSS
 st.markdown(f"""
     <style>
@@ -27,21 +38,21 @@ st.markdown(f"""
 
     html, body, [class*="css"] {{
         font-family: 'Inter', sans-serif;
-        background-color: {'#121212' if mode == 'Dark' else '#ffffff'};
-        color: {'#ffffff' if mode == 'Dark' else '#000000'};
+        background-color: {bg_color};
+        color: {text_color};
     }}
 
     h1, h3, p {{
         text-align: center;
-        color: {'#ffffff' if mode == 'Dark' else '#000000'};
+        color: {text_color};
     }}
 
     .prediction-card {{
         margin: 1rem auto;
         padding: 1rem 2rem;
         border-radius: 16px;
-        background-color: {'#1e1e1e' if mode == 'Dark' else '#f5f5f5'};
-        color: {'#ffffff' if mode == 'Dark' else '#000000'};
+        background-color: {card_bg};
+        color: {text_color};
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
         width: 90%;
         max-width: 600px;
@@ -50,16 +61,15 @@ st.markdown(f"""
     </style>
 """, unsafe_allow_html=True)
 
-# ---------- Load Model ----------
+# Load Model
 @st.cache_resource
 def load_trained_model():
     return load_model("plant_disease_model_final.h5")
 
 model = load_trained_model()
 
-# ---------- Class Names and Fertilizer Tips ----------
-class_names = [
-    'Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy',
+# Class Labels and Fertilizer Tips
+class_names = [ 'Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy',
     'Background_without_leaves', 'Blueberry___healthy', 'Cherry___Powdery_mildew', 'Cherry___healthy',
     'Corn___Cercospora_leaf_spot Gray_leaf_spot', 'Corn___Common_rust', 'Corn___Northern_Leaf_Blight', 'Corn___healthy',
     'Grape___Black_rot', 'Grape___Esca_(Black_Measles)', 'Grape___Leaf_blight_(Isariopsis_Leaf_Spot)', 'Grape___healthy',
@@ -70,10 +80,9 @@ class_names = [
     'Strawberry___Leaf_scorch', 'Strawberry___healthy',
     'Tomato___Bacterial_spot', 'Tomato___Early_blight', 'Tomato___Late_blight', 'Tomato___Leaf_Mold',
     'Tomato___Septoria_leaf_spot', 'Tomato___Spider_mites Two-spotted_spider_mite',
-    'Tomato___Target_Spot', 'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus', 'Tomato___healthy']
+    'Tomato___Target_Spot', 'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus', 'Tomato___healthy'] 
 
-fertilizer_map = {
-    'Apple___Apple_scab': 'Use copper-based fungicides',
+fertilizer_map = { 'Apple___Apple_scab': 'Use copper-based fungicides',
     'Apple___Black_rot': 'Apply sulfur sprays or captan',
     'Apple___Cedar_apple_rust': 'Use myclobutanil or mancozeb',
     'Apple___healthy': 'No fertilizer needed',
@@ -111,41 +120,36 @@ fertilizer_map = {
     'Tomato___Target_Spot': 'Apply fungicides like pyraclostrobin',
     'Tomato___Tomato_Yellow_Leaf_Curl_Virus': 'Use resistant varieties; spray imidacloprid',
     'Tomato___Tomato_mosaic_virus': 'Use resistant cultivars and disinfect tools',
-    'Tomato___healthy': 'Use balanced NPK fertilizer (10-10-10)',
-}
+    'Tomato___healthy': 'Use balanced NPK fertilizer (10-10-10);}  
 
 # Sidebar
 st.sidebar.title("🌿 Plant Guardian")
-st.sidebar.markdown("Upload a leaf image on the Detection tab to identify diseases and get fertilizer advice.")
+st.sidebar.markdown(f"<p style='color:{text_color}; font-size: 16px;'>Upload a leaf image on the Detection tab to identify diseases and get fertilizer advice.</p>", unsafe_allow_html=True)
 
 # Tabs
 tab1, tab2 = st.tabs(["🌱 Detection", "📘 Info"])
 
 with tab1:
     st.markdown("## 🌿 Plant Disease Detection")
-    # Render info text with dynamic color
-    st.sidebar.markdown(
-    f"<p style='color:{text_color}; font-size: 16px;'>Upload a leaf image on the Detection tab to identify diseases and get fertilizer advice.</p>",
-    unsafe_allow_html=True
-    )
     uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
+
     if uploaded_file:
         image = Image.open(uploaded_file).convert('RGB')
-        # Convert image to base64
         from io import BytesIO
         buffered = BytesIO()
         image.save(buffered, format="PNG")
         img_data = base64.b64encode(buffered.getvalue()).decode()
-        # Display image centered with fixed width
+
         st.markdown(
             f"""
             <div style="text-align: center;">
                 <img src="data:image/png;base64,{img_data}" alt="Uploaded Image" width="300"/>
-                <p style="color: inherit; font-size: 14px;">Uploaded Image</p>
+                <p style="color: {text_color}; font-size: 14px;">Uploaded Image</p>
             </div>
             """,
             unsafe_allow_html=True
         )
+
         img = image.resize((224, 224))
         img_array = img_to_array(img) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
@@ -153,11 +157,12 @@ with tab1:
         prediction = model.predict(img_array)
         predicted_class = class_names[np.argmax(prediction)]
         confidence = np.max(prediction) * 100
-        st.markdown(f"<div style='background-color:#1e1e1e;padding:20px;border-radius:12px; color:white;'>🔎 <strong>Prediction:</strong> {predicted_class}</div>", unsafe_allow_html=True)
-        st.markdown(f"<div style='background-color:#333333;padding:15px;border-radius:12px; color:white;'>🎯 <strong>Confidence:</strong> {confidence:.2f}%</div>", unsafe_allow_html=True)
+
+        st.markdown(f"<div class='prediction-card'>🔎 <strong>Prediction:</strong> {predicted_class}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='prediction-card'>🎯 <strong>Confidence:</strong> {confidence:.2f}%</div>", unsafe_allow_html=True)
 
         if predicted_class in fertilizer_map:
-            st.markdown(f"<div style='background-color:#262626;padding:15px;border-radius:12px; color:white;'>💡 <strong>Fertilizer Tip:</strong> {fertilizer_map[predicted_class]}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='prediction-card'>💡 <strong>Fertilizer Tip:</strong> {fertilizer_map[predicted_class]}</div>", unsafe_allow_html=True)
         else:
             st.success("✅ This plant appears healthy. No treatment needed!")
 
@@ -171,6 +176,5 @@ with tab2:
     - Deep learning–based leaf disease classification  
     - Custom fertilizer recommendations  
     - Mobile-friendly responsive layout  
-    - Dark mode UI
+    - Dark mode UI with instant toggle
     """)
-
