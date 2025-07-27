@@ -216,7 +216,8 @@ with tab1:
         <img src="data:image/png;base64,{img_str}" style="max-width: 100%; height: auto;" />
         <p style="font-size: 16px; font-weight: bold;">Grad-CAM: Highlighted Disease Regions</p>
     </div>
-    """,
+    """,unsafe_allow_html=True
+)
         
 with tab2:
     st.markdown("## 📘 About This App")
