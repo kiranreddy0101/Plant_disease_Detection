@@ -134,7 +134,9 @@ fertilizer_map = {
     'Tomato___Tomato_mosaic_virus': 'Use resistant cultivars and disinfect tools',
     'Tomato___healthy': 'Use balanced NPK fertilizer (10-10-10)',
 }
-
+st.markdown('<div class="main-container">', unsafe_allow_html=True)
+st.markdown("## 🌿 Plant Disease Detection")
+st.markdown("Upload a leaf image to identify the disease and get fertilizer suggestions.")
 # ---------- Upload and Predict ----------
 st.subheader("📷 Upload a Leaf Image")
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
