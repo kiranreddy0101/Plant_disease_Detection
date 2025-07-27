@@ -67,4 +67,4 @@ callbacks = [
 model.fit(train_generator, validation_data=val_generator, epochs=30, callbacks=callbacks)
 
 # Save final model
-model.save('plant_disease_model_final.h5')
+model.save('plant_disease_model_final.keras')
