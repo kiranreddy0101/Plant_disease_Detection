@@ -5,7 +5,6 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
 import base64
 
-
 # Page config
 st.set_page_config(page_title="Plant Disease Detection", layout="centered")
 
@@ -22,82 +21,32 @@ def set_bg_from_local(img_path):
             background-position: center;
             background-repeat: no-repeat;
             height: 100vh;
-            overflow: hidden;
+            overflow: auto;
         }}
+        .main-container {{
+            background-color: rgba(0,0,0,0.6);
+            padding: 3rem;
+            border-radius: 16px;
+            max-width: 800px;
+            margin: auto;
+        }}
+        h1, h3, p {{
+            color: #ffffff;
+            text-align: center;
+        }}
+        footer, header, .stDeployButton {{ display: none; }}
         </style>
         """,
         unsafe_allow_html=True
     )
 
-# 🔁 Replace with your actual image file path
+# Set background image (change if needed)
 set_bg_from_local("download.jpg")
-
-# ---------- Styling ----------
-st.markdown("""
-    <style>
-    .hero-box {
-        background: rgba(0, 50, 0, 0.3);
-        border: 1px solid #00ff88;
-        border-radius: 20px;
-        padding: 50px;
-        width: 100%;
-        max-width: 800px;
-        margin: 100px auto;
-        text-align: center;
-        box-shadow: 0 0 25px #00ff88;
-        backdrop-filter: blur(12px);
-    }
-    .hero-box h1 {
-        font-size: 60px;
-        color: #00ff88;
-        margin-bottom: 10px;
-        font-weight: 800;
-    }
-    .hero-box h3 {
-        font-weight: 400;
-        color: #ffffffee;
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
-    .hero-box p {
-        color: #ffffffcc;
-        font-size: 16px;
-        margin-bottom: 30px;
-    }
-    .hero-button {
-        background-color: #00ff88;
-        color: #000000;
-        font-size: 16px;
-        padding: 12px 26px;
-        border-radius: 30px;
-        text-decoration: none;
-        font-weight: bold;
-        transition: background 0.3s;
-        border: none;
-    }
-    .hero-button:hover {
-        background-color: #00cc66;
-        cursor: pointer;
-    }
-    footer, header, .stDeployButton { display: none; }
-    </style>
-""", unsafe_allow_html=True)
-
-# ---------- UI Banner ----------
-st.markdown("""
-    <div class="hero-box">
-        <h3>🌿 AI POWERED</h3>
-        <h1>Plant Disease Detection</h1>
-        <p>Detect plant diseases using deep learning and get fertilizer advice.</p>
-    </div>
-""", unsafe_allow_html=True)
 
 # ---------- Load Model ----------
 @st.cache_resource
 def load_trained_model():
     return load_model("plant_disease_model_final.h5")
-
-
 
 model = load_trained_model()
 
