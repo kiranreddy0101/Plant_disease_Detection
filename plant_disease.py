@@ -1,5 +1,6 @@
 # Import required libraries
 import tensorflow as tf
+import cv2
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.models import Model
@@ -68,4 +69,47 @@ model.fit(train_generator, validation_data=val_generator, epochs=30, callbacks=c
 
 # Save final model
 model.save("plant_disease_model_final.h5")
+model.summary()
+last_conv_layer_name = "Conv_1"
 
+def get_gradcam_heatmap(model, img_array, last_conv_layer_name, pred_index=None):
+    grad_model = tf.keras.models.Model(
+        [model.inputs],
+        [model.get_layer(last_conv_layer_name).output, model.output]
+    )
+
+    with tf.GradientTape() as tape:
+        conv_outputs, predictions = grad_model(img_array)
+        if pred_index is None:
+            pred_index = tf.argmax(predictions[0])
+        class_channel = predictions[:, pred_index]
+
+    grads = tape.gradient(class_channel, conv_outputs)
+    pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
+    conv_outputs = conv_outputs[0]
+
+    heatmap = conv_outputs @ pooled_grads[..., tf.newaxis]
+    heatmap = tf.squeeze(heatmap)
+
+    heatmap = tf.maximum(heatmap, 0) / tf.math.reduce_max(heatmap)
+    return heatmap.numpy()
+
+def overlay_gradcam(original_img, heatmap, alpha=0.4):
+    heatmap = cv2.resize(heatmap, (original_img.shape[1], original_img.shape[0]))
+    heatmap = np.uint8(255 * heatmap)
+    heatmap_color = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
+    overlay_img = cv2.addWeighted(original_img, 1 - alpha, heatmap_color, alpha, 0)
+    return overlay_img
+
+# Load model and image
+model = load_model("plant_disease_model_final.h5")
+image_path = "sample_leaf.jpg"  # Replace with uploaded image
+original_img = cv2.imread(image_path)
+img_resized = cv2.resize(original_img, (224, 224))
+img_array = np.expand_dims(img_resized / 255.0, axis=0)
+
+# Get heatmap
+heatmap = get_gradcam_heatmap(model, img_array, last_conv_layer_name="Conv_1")
+
+# Overlay
+overlay_img = overlay_gradcam(original_img, heatmap)
