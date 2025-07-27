@@ -136,7 +136,7 @@ fertilizer_map = {
 }
 st.markdown('<div class="main-container">', unsafe_allow_html=True)
 st.markdown("## 🌿 Plant Disease Detection")
-st.markdown("Upload a leaf image to identify the disease and get fertilizer suggestions.")
+st.markdown("<p style='color:white;'>Upload a leaf image to identify the disease and get fertilizer suggestions.</p>", unsafe_allow_html=True)
 # ---------- Upload and Predict ----------
 st.subheader("📷 Upload a Leaf Image")
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
