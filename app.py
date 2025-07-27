@@ -95,7 +95,8 @@ st.markdown("""
 # ---------- Load Model ----------
 @st.cache_resource
 def load_trained_model():
-    return load_model("plant_disease_model_final.keras", compile=False)
+    return load_model("plant_disease_model_final_clean.keras", compile=False)
+
 
 
 model = load_trained_model()
