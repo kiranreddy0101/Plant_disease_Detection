@@ -213,7 +213,7 @@ with tab1:
         st.markdown(
     f"""
     <div style="text-align: center;">
-        <img src="data:image/png;base64,{img_str}" style="width: 300;" />
+        <img src="data:image/png;base64,{img_str}" width: "300"/>
         <p style="font-size: 16px; font-weight: bold;">Grad-CAM: Highlighted Disease Regions</p>
     </div>
     """,
