@@ -145,7 +145,7 @@ with tab1:
 with tab2:
   st.markdown("## 📘 About This App")
   st.markdown("""
-   This AI-powered application helps farmers and gardeners detect plant diseases from leaf images
+   This application helps farmers and gardeners detect plant diseases from leaf images
    and recommends suitable fertilizers or treatments.
 
    **Features:**
