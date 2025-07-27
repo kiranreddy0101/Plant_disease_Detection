@@ -1,6 +1,6 @@
 ﻿tensorflow==2.11.0
 streamlit
 Pillow
-numpy
+numpy<2.0
 matplotlib
 scikit-learn
