@@ -89,10 +89,7 @@ st.markdown("""
     h1, h3, p {
         text-align: center;
     }
-    <div style="text-align: center;">
-        <img src="data:image/png;base64,{img_str}" style="max-width: 100%; height: auto;" />
-        <p style="font-size: 16px; font-weight: bold;">Grad-CAM: Highlighted Disease Regions</p>
-    </div>
+   
     </style>
 """, unsafe_allow_html=True)
 
@@ -213,6 +210,15 @@ with tab1:
         heatmap = get_gradcam_heatmap(model, img_array, last_conv_layer_name="Conv_1")
         overlay_img = overlay_gradcam(img, heatmap)
         st.markdown("### 📊 Grad-CAM: Model Focus Visualization")
+        st.markdown(
+    f"""
+    <div style="text-align: center;">
+        <img src="data:image/png;base64,{img_str}" style="width: 300;" />
+        <p style="font-size: 16px; font-weight: bold;">Grad-CAM: Highlighted Disease Regions</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
         
 with tab2:
     st.markdown("## 📘 About This App")
