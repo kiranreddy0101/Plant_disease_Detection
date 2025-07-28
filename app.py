@@ -139,9 +139,7 @@ with tab1:
 st.markdown("### 🧪 Predicted Diseases:")
 preds = model.predict(img_array)[0]  # Get prediction scores
 top_indices = preds.argsort()[-3:][::-1]  # Top 3 indices
-
 fertilizer_shown = False  # Flag to ensure we show only one tip
-
 for idx in top_indices:
     if idx < len(class_names):
         disease = class_names[idx]
