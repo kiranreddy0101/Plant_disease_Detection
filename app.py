@@ -38,7 +38,7 @@ def overlay_gradcam(original_img, heatmap, alpha=0.4):
 
 st.set_page_config(page_title="Plant Disease Detection", layout="wide")
 
-st.markdown(\""
+st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
     html, body, [class*="css"] {
@@ -71,7 +71,7 @@ st.markdown(\""
         text-align: center;
     }
     </style>
-\"", unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 @st.cache_resource
 def load_trained_model():
