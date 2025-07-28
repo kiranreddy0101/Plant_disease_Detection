@@ -107,7 +107,26 @@ with tab1:
 
         # 1. Symptom Checker
         st.markdown("### 📝 Select Observed Symptoms (Optional)")
-        symptoms = st.multiselect("Check any visible symptoms on the leaf:", ["Yellow Spots", "Curling", "Black Dots", "Dry Patches", "Wilting", "White Powder", "Brown Edges"])
+        symptoms = st.multiselect("Check any visible symptoms on the leaf:", ["Apple_scab",
+    "Black_rot",
+    "Cedar_apple_rust",
+    "Powdery_mildew",
+    "Cercospora_leaf_spot Gray_leaf_spot",
+    "Common_rust",
+    "Northern_Leaf_Blight",
+    "Esca_(Black_Measles)",
+    "Leaf_blight_(Isariopsis_Leaf_Spot)",
+    "Haunglongbing_(Citrus_greening)",
+    "Bacterial_spot",
+    "Early_blight",
+    "Late_blight",
+    "Leaf_scorch",
+    "Leaf_Mold",
+    "Septoria_leaf_spot",
+    "Spider_mites Two-spotted_spider_mite",
+    "Target_Spot",
+    "Tomato_Yellow_Leaf_Curl_Virus",
+    "Tomato_mosaic_virus"])
         if symptoms:
             st.info(f"Symptoms noted: {', '.join(symptoms)}")
 
