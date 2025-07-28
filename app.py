@@ -127,35 +127,39 @@ with tab1:
     "Target_Spot",
     "Tomato_Yellow_Leaf_Curl_Virus",
     "Tomato_mosaic_virus"])
-        if symptoms:
-            st.info(f"Symptoms noted: {', '.join(symptoms)}")
+        
+       # 1. Image Preprocessing
+if uploaded_file is not None:
+    image = Image.open(uploaded_file).convert("RGB")
+    st.image(image, caption="Uploaded Leaf", use_column_width=True)
 
-        # Prepare image
-        img = image.resize((224, 224))
-        img_array = img_to_array(img) / 255.0
-        img_array = np.expand_dims(img_array, axis=0)
+    # Resize and convert to array
+    img_resized = image.resize((224, 224))  # Match model input size
+    img_array = img_to_array(img_resized) / 255.0
+    img_array = np.expand_dims(img_array, axis=0)
 
-# 2. Multi-label (Simulated Top 3)
-st.markdown("### 🧪 Predicted Diseases:")
-preds = model.predict(img_array)[0]  # Get prediction scores
-top_indices = preds.argsort()[-3:][::-1]  # Top 3 indices
-fertilizer_shown = False  # Flag to ensure we show only one tip
-for idx in top_indices:
-    if idx < len(class_names):
-        disease = class_names[idx]
-        confidence = preds[idx]
-        st.markdown(f"- {disease} ({confidence*100:.2f}%)")
+    # 2. Multi-label (Simulated Top 3)
+    st.markdown("### 🧪 Predicted Diseases:")
+    preds = model.predict(img_array)[0]  # Get prediction scores
+    top_indices = preds.argsort()[-3:][::-1]  # Top 3 indices
 
-        # Show fertilizer tip only for first matched disease
-        if not fertilizer_shown and disease in fertilizer_map:
-            tip = fertilizer_map[disease]
-            st.markdown(
-                f"<div class='prediction-card'>🌿 <strong>Fertilizer Tip:</strong> {tip}</div>",
-                unsafe_allow_html=True
-            )
-            fertilizer_shown = True
-    else:
-        st.warning(f"⚠ Prediction index {idx} out of range for class list.")
+    fertilizer_shown = False
+
+    for idx in top_indices:
+        if idx < len(class_names):
+            disease = class_names[idx]
+            confidence = preds[idx]
+            st.markdown(f"- {disease} ({confidence*100:.2f}%)")
+
+            if not fertilizer_shown and disease in fertilizer_map:
+                tip = fertilizer_map[disease]
+                st.markdown(
+                    f"<div class='prediction-card'>🌿 <strong>Fertilizer Tip:</strong> {tip}</div>",
+                    unsafe_allow_html=True
+                )
+                fertilizer_shown = True
+        else:
+            st.warning(f"⚠ Prediction index {idx} out of range for class list.")
 
 
 
