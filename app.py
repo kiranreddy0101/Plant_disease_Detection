@@ -157,7 +157,7 @@ with tab1:
 
 with tab2:
     st.markdown("## 📘 About This App")
-    st.markdown(\"""
+    st.markdown("""
     This application helps farmers and gardeners detect plant diseases from leaf images 
     and recommends suitable fertilizers or treatments.
 
@@ -167,6 +167,6 @@ with tab2:
     - Grad-CAM for explainable AI  
     - Mobile-friendly responsive layout  
     - Dark mode UI with instant toggle (via system preference)
-    \""")
+    """)
 
 
