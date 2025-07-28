@@ -122,18 +122,21 @@ with tab1:
         st.markdown("### 🧪 Predicted Diseases:")
         preds = model.predict(img_array)[0]
         top_indices = preds.argsort()[-3:][::-1]
+        fertilizer_shown = False  # flag to ensure we show only once
+for idx in top_indices:
+    if idx < len(class_names):
+        disease = class_names[idx]
+        confidence = preds[idx]
+        st.markdown(f"- {disease} ({confidence*100:.2f}%)")
+        
+        # Show fertilizer tip only for the first matched disease
+        if not fertilizer_shown and disease in fertilizer_map:
+            tip = fertilizer_map[disease]
+            st.markdown(f"<div class='prediction-card'>🌿 <strong>Fertilizer Tip:</strong> {tip}</div>", unsafe_allow_html=True)
+            fertilizer_shown = True
+    else:
+        st.warning(f"⚠ Prediction index {idx} out of range for class list.")
 
-        for idx in top_indices:
-           if idx < len(class_names):
-             disease = class_names[idx]
-             confidence = preds[idx]
-             st.markdown(f"- {disease} ({confidence*100:.2f}%)")
-           else:
-             st.warning(f"⚠ Prediction index {idx} out of range for class list.")
-
-        if disease in fertilizer_map:
-                tip = fertilizer_map[disease]
-                st.markdown(f"<div class='prediction-card'>🌿 <strong>Fertilizer Tip:</strong> {tip}</div>", unsafe_allow_html=True)
 
         # 3. Grad-CAM
         heatmap = get_gradcam_heatmap(model, img_array, last_conv_layer_name="Conv_1")
