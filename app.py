@@ -196,13 +196,13 @@ with tab1:
         confidence = np.max(prediction) * 100
 
         # Display prediction and confidence
-        st.markdown(f"<div class='prediction-card'>?? <strong>Prediction:</strong> {predicted_class}</div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='prediction-card'>?? <strong>Confidence:</strong> {confidence:.2f}%</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='prediction-card'>🔎 <strong>Prediction:</strong> {predicted_class}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='prediction-card'>🎯 <strong>Confidence:</strong> {confidence:.2f}%</div>", unsafe_allow_html=True)
 
         # Fertilizer suggestion
         if predicted_class in fertilizer_map:
             tip = fertilizer_map[predicted_class]
-            st.markdown(f"<div class='prediction-card'>?? <strong>Fertilizer Tip:</strong> {tip}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='prediction-card'>💡 <strong>Fertilizer Tip:</strong> {tip}</div>", unsafe_allow_html=True)
         else:
             st.success("? This plant appears healthy. No treatment needed!")
 
