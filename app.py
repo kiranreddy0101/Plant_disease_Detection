@@ -135,26 +135,31 @@ with tab1:
         img_array = img_to_array(img) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
 
-               # 2. Multi-label (Simulated Top 3)
-        st.markdown("### 🧪 Predicted Diseases:")
-        preds = model.predict(img_array)[0]
-        top_indices = preds.argsort()[-3:][::-1]
-        fertilizer_shown = False  # flag to ensure we show only once
+# 2. Multi-label (Simulated Top 3)
+st.markdown("### 🧪 Predicted Diseases:")
+preds = model.predict(img_array)[0]  # Get prediction scores
+top_indices = preds.argsort()[-3:][::-1]  # Top 3 indices
 
-        for idx in top_indices:
-            if idx < len(class_names):
-                disease = class_names[idx]
-                confidence = preds[idx]
-                st.markdown(f"- {disease} ({confidence*100:.2f}%)")
+fertilizer_shown = False  # Flag to ensure we show only one tip
 
-                if not fertilizer_shown and disease in fertilizer_map:
-                    tip = fertilizer_map[disease]
-                    st.markdown(
-                        f"<div class='prediction-card'>🌿 <strong>Fertilizer Tip:</strong> {tip}</div>",
-                        unsafe_allow_html=True)
-                    fertilizer_shown = True
-            else:
-                st.warning(f"⚠ Prediction index {idx} out of range for class list.")
+for idx in top_indices:
+    if idx < len(class_names):
+        disease = class_names[idx]
+        confidence = preds[idx]
+        st.markdown(f"- {disease} ({confidence*100:.2f}%)")
+
+        # Show fertilizer tip only for first matched disease
+        if not fertilizer_shown and disease in fertilizer_map:
+            tip = fertilizer_map[disease]
+            st.markdown(
+                f"<div class='prediction-card'>🌿 <strong>Fertilizer Tip:</strong> {tip}</div>",
+                unsafe_allow_html=True
+            )
+            fertilizer_shown = True
+    else:
+        st.warning(f"⚠ Prediction index {idx} out of range for class list.")
+
+
 
         # 3. Grad-CAM
         heatmap = get_gradcam_heatmap(model, img_array, last_conv_layer_name="Conv_1")
