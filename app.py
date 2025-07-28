@@ -135,27 +135,26 @@ with tab1:
         img_array = img_to_array(img) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
 
-        # 2. Multi-label (Simulated Top 3)
-        prediction = model.predict(img_array)
-        top_3_indices = prediction[0].argsort()[-3:][::-1]
+               # 2. Multi-label (Simulated Top 3)
         st.markdown("### 🧪 Predicted Diseases:")
         preds = model.predict(img_array)[0]
         top_indices = preds.argsort()[-3:][::-1]
         fertilizer_shown = False  # flag to ensure we show only once
-for idx in top_indices:
-    if idx < len(class_names):
-        disease = class_names[idx]
-        confidence = preds[idx]
-        st.markdown(f"- {disease} ({confidence*100:.2f}%)")
-        
-        # Show fertilizer tip only for the first matched disease
-        if not fertilizer_shown and disease in fertilizer_map:
-            tip = fertilizer_map[disease]
-            st.markdown(f"<div class='prediction-card'>🌿 <strong>Fertilizer Tip:</strong> {tip}</div>", unsafe_allow_html=True)
-            fertilizer_shown = True
-    else:
-        st.warning(f"⚠ Prediction index {idx} out of range for class list.")
 
+        for idx in top_indices:
+            if idx < len(class_names):
+                disease = class_names[idx]
+                confidence = preds[idx]
+                st.markdown(f"- {disease} ({confidence*100:.2f}%)")
+
+                if not fertilizer_shown and disease in fertilizer_map:
+                    tip = fertilizer_map[disease]
+                    st.markdown(
+                        f"<div class='prediction-card'>🌿 <strong>Fertilizer Tip:</strong> {tip}</div>",
+                        unsafe_allow_html=True)
+                    fertilizer_shown = True
+            else:
+                st.warning(f"⚠ Prediction index {idx} out of range for class list.")
 
         # 3. Grad-CAM
         heatmap = get_gradcam_heatmap(model, img_array, last_conv_layer_name="Conv_1")
@@ -173,16 +172,22 @@ for idx in top_indices:
             "Potassium (K)": np.random.randint(40, 110),
         }
         df = pd.DataFrame([synthetic_data])
-        st.dataframe(df.style.set_table_styles([
-            {'selector': 'th', 'props': [('text-align', 'center')]},
-            {'selector': 'td', 'props': [('text-align', 'center')]}
-        ]).set_properties(**{'background-color': '#222', 'color': 'white', 'border-color': 'white'}), height=150)
+        st.dataframe(df.style.set_table_styles([{
+            'selector': 'th',
+            'props': [('text-align', 'center')]
+        }, {
+            'selector': 'td',
+            'props': [('text-align', 'center')]
+        }]).set_properties(
+            **{'background-color': '#222', 'color': 'white', 'border-color': 'white'}
+        ), height=150)
 
         # 5. Explanation Headings
         st.markdown("### 🌲 Gradient Boosting Explanation")
         st.markdown("This section uses Gradient Boosting Machine (GBM) to refine environmental feature-based predictions.")
         st.markdown("### 🔍 LIME Explanation")
         st.markdown("LIME explains the model's prediction by approximating it locally using interpretable models.")
+
 
 with tab2:
     st.markdown("## 📘 About This App")
