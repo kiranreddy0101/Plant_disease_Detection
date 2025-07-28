@@ -156,17 +156,17 @@ fertilizer_map = {'Apple___Apple_scab': 'Use copper-based fungicides',
     'Tomato___healthy': 'Use balanced NPK fertilizer (10-10-10)',}  
 
 # Sidebar
-st.sidebar.title("?? Plant Guardian")
+st.sidebar.title("🌿 Plant Guardian")
 st.sidebar.markdown(
     "<p style='font-size:16px;'>Upload a leaf image on the Detection tab to identify diseases and get fertilizer advice.</p>",
     unsafe_allow_html=True
 )
 
 # Tabs
-tab1, tab2 = st.tabs(["?? Detection", "?? Info"])
+tab1, tab2 = st.tabs(["🌱 Detection", "📘 Info"])
 
 with tab1:
-    st.markdown("## ?? Plant Disease Detection")
+    st.markdown("## 🌿 Plant Disease Detection")
     uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
 
     if uploaded_file:
@@ -209,11 +209,11 @@ with tab1:
         # Grad-CAM Visualization
         heatmap = get_gradcam_heatmap(model, img_array, last_conv_layer_name="Conv_1")
         overlay_img = overlay_gradcam(img, heatmap)
-        st.markdown("### ?? Grad-CAM: Model Focus Visualization")
+        st.markdown("### 📊 Grad-CAM: Model Focus Visualization")
         st.image(overlay_img, caption="Grad-CAM: Highlighted Disease Regions", use_container_width=True)
      
 with tab2:
-    st.markdown("## ?? About This App")
+    st.markdown("## 📘 About This App")
     st.markdown("""
     This application helps farmers and gardeners detect plant diseases from leaf images 
     and recommends suitable fertilizers or treatments.
