@@ -120,11 +120,18 @@ with tab1:
         prediction = model.predict(img_array)
         top_3_indices = prediction[0].argsort()[-3:][::-1]
         st.markdown("### 🧪 Predicted Diseases:")
-        for idx in top_3_indices:
-            disease = class_names[idx]
-            conf = prediction[0][idx] * 100
-            st.markdown(f"<div class='prediction-card'>🔬 <strong>{disease}</strong> — {conf:.2f}%</div>", unsafe_allow_html=True)
-            if disease in fertilizer_map:
+        preds = model.predict(img_array)[0]
+        top_indices = preds.argsort()[-3:][::-1]
+
+        for idx in top_indices:
+           if idx < len(class_names):
+             disease = class_names[idx]
+             confidence = preds[idx]
+             st.markdown(f"- {disease} ({confidence*100:.2f}%)")
+           else:
+             st.warning(f"⚠ Prediction index {idx} out of range for class list.")
+
+        if disease in fertilizer_map:
                 tip = fertilizer_map[disease]
                 st.markdown(f"<div class='prediction-card'>🌿 <strong>Fertilizer Tip:</strong> {tip}</div>", unsafe_allow_html=True)
 
