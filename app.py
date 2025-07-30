@@ -19,14 +19,14 @@ def get_gradcam_heatmap(model, img_array, last_conv_layer_name, pred_index=None)
         conv_outputs, predictions = grad_model(img_array)
         if pred_index is None:
             pred_index = tf.argmax(predictions[0])
-            class_channel = predictions[:, pred_index]
-            grads = tape.gradient(class_channel, conv_outputs)
-            pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
-            conv_outputs = conv_outputs[0]
-            heatmap = conv_outputs @ pooled_grads[..., tf.newaxis]
-            heatmap = tf.squeeze(heatmap)
-            heatmap = tf.maximum(heatmap, 0) / tf.math.reduce_max(heatmap)
-            return heatmap.numpy()
+        class_channel = predictions[:, pred_index]
+        grads = tape.gradient(class_channel, conv_outputs)
+        pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
+        conv_outputs = conv_outputs[0]
+        heatmap = conv_outputs @ pooled_grads[..., tf.newaxis]
+        heatmap = tf.squeeze(heatmap)
+        heatmap = tf.maximum(heatmap, 0) / tf.math.reduce_max(heatmap)
+        return heatmap.numpy()
 
 def overlay_gradcam(original_img, heatmap, alpha=0.4):
     original_img = np.array(original_img)
